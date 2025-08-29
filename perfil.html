@@ -8,7 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="styles.css">
-    <link rel="icon" type="image/png" href="../image/logo.png">
+    <link rel="icon" type="image/png" href="./image/logo.png">
     <script src="theme.js" defer></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
@@ -131,7 +131,7 @@
 
                         <!-- Foto de Perfil -->
                         <div class="relative group cursor-pointer mb-6 md:mb-0">
-                            <img id="profileImage" src="../image/null.png" alt="Foto de Perfil"
+                            <img id="profileImage" src="./image/null.png" alt="Foto de Perfil"
                                 class="w-32 h-32 md:w-36 md:h-36 rounded-full object-cover border-4 border-green-500 transition-all duration-300 group-hover:opacity-70">
 
                             <div
@@ -373,7 +373,7 @@
                         const itemCard = document.createElement('div');
                         itemCard.className = 'item-card p-4 text-center';
                         itemCard.innerHTML = `
-                            <img src="${item.imagem || '../image/logo.png'}" alt="${item.titulo}" class="w-full h-48 object-cover mb-4 rounded-lg">
+                            <img src="${item.imagem || './image/logo.png'}" alt="${item.titulo}" class="w-full h-48 object-cover mb-4 rounded-lg">
                             <h4 class="text-lg font-bold text-primary mb-2">${item.titulo}</h4>
                             <div class="text-sm text-secondary mb-2">
                                 <span class="font-semibold">Tipo:</span> ${item.tipo}
@@ -415,7 +415,7 @@
                             const negCard = document.createElement('div');
                             negCard.className = 'bg-card-bg p-4 rounded-lg shadow-sm border border-theme flex items-center space-x-4';
                             negCard.innerHTML = `
-                                <img src="${negociacao.imagemPeca || '../image/logo.png'}" alt="Imagem da peça" class="w-16 h-16 object-cover rounded-md">
+                                <img src="${negociacao.imagemPeca || './image/logo.png'}" alt="Imagem da peça" class="w-16 h-16 object-cover rounded-md">
                                 <div>
                                     <h4 class="text-lg font-semibold text-primary">${negociacao.tituloPeca}</h4>
                                     <p class="text-sm text-secondary">Status: <span class="font-bold">${negociacao.status}</span></p>
