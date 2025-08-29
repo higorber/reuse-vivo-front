@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Negociar Troca | ReUse Jovem</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/png" href="../image/logo.png">
+  <script src="theme.js" defer></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+    
+    .info-card {
+      background-color: var(--card-bg);
+      border-radius: 1rem;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s ease-in-out;
+      cursor: pointer;
+      border: 1px solid var(--border-color);
+    }
+
+    .info-card:hover {
+      transform: translateY(-5px);
+    }
+  </style>
+</head>
+<body class="flex flex-col min-h-screen bg-primary">
+  <header class="shadow-md p-4 flex justify-between items-center sticky top-0 z-50 bg-primary border-b border-theme">
+    <div class="flex items-center space-x-4">
+      <button onclick="window.history.back()" class="text-secondary hover:text-primary">
+        <i class="fas fa-arrow-left text-2xl"></i>
+      </button>
+      <h1 class="text-xl font-extrabold text-primary">ReUse Jovem</h1>
+    </div>
+  </header>
+
+  <main class="flex-grow p-8">
+    <div class="container mx-auto max-w-4xl">
+      <!-- Card da peça da loja -->
+    <div class="bg-white shadow-lg rounded-2xl p-6 mb-6">
+      <h2 class="text-2xl font-bold text-gray-800 mb-4">Peça que você deseja</h2>
+      
+      <div class="flex flex-col md:flex-row gap-6">
+        <img id="pecaImagem" src="" alt="" class="w-full md:w-48 h-48 object-cover rounded-lg">
+        
+        <div class="flex-1">
+          <h3 id="titulo" class="text-xl font-bold text-gray-800 mb-2"></h3>
+          <p id="descricao" class="text-gray-600 mb-4"></p>
+          
+          <div class="grid grid-cols-2 gap-4 mb-4">
+            <div class="bg-gray-50 p-3 rounded-xl shadow-sm">
+              <span class="text-sm text-gray-500">Categoria</span>
+              <p id="categoria" class="font-semibold text-gray-800"></p>
+            </div>
+            <div class="bg-gray-50 p-3 rounded-xl shadow-sm">
+              <span class="text-sm text-gray-500">Tipo</span>
+              <p id="tipo" class="font-semibold text-gray-800"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Seção de informações completas da peça -->
+    <div id="infoCompleta" class="bg-white shadow-lg rounded-2xl p-6 hidden">
+      <h2 class="text-2xl font-bold text-gray-800 mb-4">Informações Completas</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <h3 class="text-lg font-semibold text-gray-700 mb-2">Detalhes da Peça</h3>
+          <div class="space-y-3">
+            <div class="flex justify-between">
+              <span class="text-gray-600">Título:</span>
+              <span id="infoTitulo" class="font-medium text-gray-800"></span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">Descrição:</span>
+              <span id="infoDescricao" class="font-medium text-gray-800"></span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">Categoria:</span>
+              <span id="infoCategoria" class="font-medium text-gray-800"></span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">Tipo:</span>
+              <span id="infoTipo" class="font-medium text-gray-800"></span>
+            </div>
+            <div id="infoPrecoContainer" class="flex justify-between hidden">
+              <span class="text-gray-600">Preço:</span>
+              <span id="infoPreco" class="font-bold text-green-600"></span>
+            </div>
+            <div id="infoPreferenciaContainer" class="flex justify-between hidden">
+              <span class="text-gray-600">Preferência de Troca:</span>
+              <span id="infoPreferencia" class="font-medium text-gray-800"></span>
+            </div>
+          </div>
+        </div>
+        
+        <div>
+          <h3 class="text-lg font-semibold text-gray-700 mb-2">Ações</h3>
+          <div class="space-y-3">
+            <button id="btnProporTroca" class="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-4 rounded-xl shadow-md transition">
+              Propor Troca
+            </button>
+            <button id="btnComprar" class="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-4 rounded-xl shadow-md transition hidden">
+              Comprar Agora
+            </button>
+            <button onclick="window.history.back()" class="w-full bg-gray-300 hover:bg-gray-400 text-gray-700 font-semibold py-3 px-4 rounded-xl shadow-md transition">
+              Voltar para Loja
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de erro quando não tem peças -->
+    <div id="modalSemPecas" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+      <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+        <h3 class="text-xl font-bold text-gray-800 mb-4">Atenção</h3>
+        <p class="text-gray-600 mb-6">Você precisa cadastrar pelo menos uma peça antes de poder negociar.</p>
+        <div class="flex justify-end">
+          <button onclick="redirecionarParaPerfil()" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg">
+            Cadastrar Peça
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de sucesso -->
+    <div id="modalSucesso" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+      <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+        <div class="text-center">
+          <i class="fas fa-check-circle text-green-500 text-4xl mb-4"></i>
+          <h3 class="text-xl font-bold text-gray-800 mb-2">Sucesso!</h3>
+          <p class="text-gray-600 mb-4">Requisição de troca enviada com sucesso.</p>
+          <button onclick="redirecionarParaLoja()" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg">
+            Voltar para Loja
+          </button>
+        </div>
+      </div>
+    </div>
+    </div>
+  </main>
+
+  <footer class="w-full mt-auto p-4 rounded-t-lg shadow-md bg-footer">
+    <p class="font-semibold text-center text-secondary">
+      Juntos, podemos fazer a nossa parte.
+    </p>
+  </footer>
+
+<script>
+  const API_BASE_URL = 'https://reuse-vivo-back.onrender.com';
+
+  let pecaDestinoId = null;
+  let pecaDestinoData = null;
+
+  // Função para obter parâmetros da URL
+  function getUrlParams() {
+    const params = {};
+    const queryString = window.location.search.substring(1);
+    const pairs = queryString.split('&');
+    
+    for (let i = 0; i < pairs.length; i++) {
+      const pair = pairs[i].split('=');
+      params[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '');
+    }
+    return params;
+  }
+
+  // Funções de redirecionamento
+  function redirecionarParaPerfil() {
+    window.location.href = 'perfil.html';
+  }
+
+  function redirecionarParaLoja() {
+    window.location.href = 'loja.html';
+  }
+
+  // Carregar dados do produto e verificar peças do usuário
+  const loadProductData = async () => {
+    const params = getUrlParams();
+    const productId = params.id;
+
+    if (!productId) {
+      alert('ID do produto não encontrado na URL');
+      return;
+    }
+
+    try {
+      // Buscar dados do produto
+      const response = await fetch(`${API_BASE_URL}/pecas?id=${productId}`);
+      if (!response.ok) {
+        throw new Error('Produto não encontrado');
+      }
+      
+      pecaDestinoData = await response.json();
+      pecaDestinoId = productId;
+
+      // Preencher informações da peça
+      document.getElementById('titulo').innerText = pecaDestinoData.titulo;
+      document.getElementById('descricao').innerText = pecaDestinoData.descricao;
+      document.getElementById('categoria').innerText = pecaDestinoData.categoria;
+      document.getElementById('tipo').innerText = pecaDestinoData.tipo;
+      
+      if (pecaDestinoData.imagem) {
+        document.getElementById('pecaImagem').src = pecaDestinoData.imagem;
+      }
+
+      // Verificar se usuário tem peças para troca
+      await verificarPecasUsuario();
+
+    } catch (error) {
+      console.error('Erro ao carregar dados:', error);
+      alert('Erro ao carregar informações. Tente novamente.');
+    }
+  };
+
+  // Preencher informações completas da peça
+  const preencherInformacoesCompletas = () => {
+    document.getElementById('infoTitulo').innerText = pecaDestinoData.titulo;
+    document.getElementById('infoDescricao').innerText = pecaDestinoData.descricao;
+    document.getElementById('infoCategoria').innerText = pecaDestinoData.categoria;
+    document.getElementById('infoTipo').innerText = pecaDestinoData.tipo;
+    
+    // Mostrar preço se for venda
+    if (pecaDestinoData.tipo === 'Venda' && pecaDestinoData.preco) {
+      document.getElementById('infoPrecoContainer').classList.remove('hidden');
+      document.getElementById('infoPreco').innerText = `R$ ${pecaDestinoData.preco.toFixed(2).replace('.', ',')}`;
+      document.getElementById('btnComprar').classList.remove('hidden');
+      document.getElementById('btnProporTroca').classList.add('hidden');
+    }
+    
+    // Mostrar preferência se for troca
+    if (pecaDestinoData.tipo === 'Troca' && pecaDestinoData.preferencia) {
+      document.getElementById('infoPreferenciaContainer').classList.remove('hidden');
+      document.getElementById('infoPreferencia').innerText = pecaDestinoData.preferencia;
+      document.getElementById('btnComprar').classList.add('hidden');
+      document.getElementById('btnProporTroca').classList.remove('hidden');
+    }
+    
+    // Mostrar seção de informações completas
+    document.getElementById('infoCompleta').classList.remove('hidden');
+  };
+
+  // Verificar se usuário tem peças cadastradas
+  const verificarPecasUsuario = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/pecas-usuario`);
+      if (!response.ok) {
+        throw new Error('Erro ao carregar peças do usuário');
+      }
+
+      const userPecas = await response.json();
+      
+      if (userPecas.length === 0) {
+        // Usuário não tem peças - mostrar modal
+        document.getElementById('modalSemPecas').classList.remove('hidden');
+      } else {
+        // Usuário tem peças - mostrar informações completas
+        preencherInformacoesCompletas();
+      }
+
+    } catch (error) {
+      console.error('Erro ao verificar peças:', error);
+      alert('Não é possível realizar trocas ou compra sem uma conta. Crie uma agora ou, se já tiver, basta realizar login.');
+      window.location.href = "./login.html";
+    }
+  };
+
+  // Modal para selecionar peça para troca
+  const mostrarModalSelecaoPeca = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/pecas-usuario`);
+      if (!response.ok) {
+        throw new Error('Erro ao carregar peças do usuário');
+      }
+
+      const userPecas = await response.json();
+      
+      if (userPecas.length === 0) {
+        document.getElementById('modalSemPecas').classList.remove('hidden');
+        return;
+      }
+
+      // Criar modal de seleção
+      const modalHTML = `
+        <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">Selecione sua peça para troca</h3>
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-gray-700 mb-2">
+                Suas peças disponíveis para troca:
+              </label>
+              <select id="selectPecaTroca" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500">
+                <option value="">Selecione uma peça</option>
+                ${userPecas.map(peca => `<option value="${peca.id}">${peca.titulo}</option>`).join('')}
+              </select>
+            </div>
+            <div class="flex justify-end space-x-2">
+              <button onclick="fecharModalSelecao()" class="bg-gray-300 hover:bg-gray-400 text-gray-700 font-semibold py-2 px-4 rounded-lg">
+                Cancelar
+              </button>
+              <button onclick="enviarPropostaTroca()" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg">
+                Confirmar
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      // Adicionar modal ao documento
+      const modalContainer = document.createElement('div');
+      modalContainer.id = 'modalSelecaoPeca';
+      modalContainer.innerHTML = modalHTML;
+      document.body.appendChild(modalContainer);
+
+    } catch (error) {
+      console.error('Erro ao carregar peças:', error);
+      alert('Erro ao carregar suas peças. Tente novamente.');
+    }
+  };
+
+  // Fechar modal de seleção
+  const fecharModalSelecao = () => {
+    const modal = document.getElementById('modalSelecaoPeca');
+    if (modal) {
+      modal.remove();
+    }
+  };
+
+  // Enviar proposta de troca com peça selecionada
+  const enviarPropostaTroca = async () => {
+    const pecaOrigemId = document.getElementById('selectPecaTroca').value;
+    
+    if (!pecaOrigemId) {
+      alert('Por favor, selecione uma peça para trocar.');
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/troca`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          idPecaOrigem: pecaOrigemId,
+          idPecaDestino: pecaDestinoId
+        }),
+      });
+
+      if (response.ok) {
+        fecharModalSelecao();
+        document.getElementById('modalSucesso').classList.remove('hidden');
+      } else {
+        const errorText = await response.text();
+        alert('Erro ao enviar proposta: ' + errorText);
+      }
+    } catch (error) {
+      console.error('Erro ao enviar proposta:', error);
+      alert('Erro ao enviar proposta de troca. Tente novamente.');
+    }
+  };
+
+  // Propor troca (abrir modal de seleção)
+  const proporTroca = () => {
+    mostrarModalSelecaoPeca();
+  };
+
+  // Comprar peça
+  const comprarPeca = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/comprar/${pecaDestinoId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const message = await response.text();
+        alert(message);
+        window.location.href = 'loja.html';
+      } else {
+        const errorText = await response.text();
+        alert('Erro ao comprar: ' + errorText);
+      }
+    } catch (error) {
+      console.error('Erro ao comprar:', error);
+      alert('Erro ao realizar compra. Tente novamente.');
+    }
+  };
+
+  // Event listeners
+  document.addEventListener('DOMContentLoaded', loadProductData);
+  document.getElementById('btnProporTroca').addEventListener('click', proporTroca);
+  document.getElementById('btnComprar').addEventListener('click', comprarPeca);
+</script>
+</body>
+</html>

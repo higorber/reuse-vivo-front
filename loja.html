@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loja | ReUse Jovem</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="chatbot-package/chatbot.css">
+    <link rel="icon" type="image/png" href="../image/logo.png">
+    <script src="theme.js" defer></script>
+    <script src="chatbot-package/chatbot.js" defer></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-primary);
+        }
+        #menuList {
+            position: fixed;
+            top: 68px;
+            left: 0;
+            width: 250px;
+            height: 100vh;
+            background-color: var(--header-bg);
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease-in-out;
+            transform: translateX(-100%);
+            z-index: 40;
+            border-right: 1px solid var(--border-color);
+        }
+        #menuList.active {
+            transform: translateX(0);
+        }
+        .peca-card {
+            background-color: var(--card-bg);
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+        }
+        .peca-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .premium-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+    
+    <header class="shadow-md p-4 flex justify-between items-center sticky top-0 z-50 w-full bg-primary border-b border-theme">
+        <div class="flex items-center space-x-4">
+            <button id="menuToggle" class="text-secondary text-2xl hover:text-primary">
+                <i class="fas fa-bars"></i>
+            </button>
+            <h1 class="text-xl font-extrabold text-primary">ReUse Jovem</h1>
+        </div>
+        
+        <div class="flex items-center space-x-4 ml-auto">
+            <button id="themeToggle" class="theme-toggle" aria-label="Alternar modo escuro"></button>
+            
+            <div id="loggedOutButtons" class="flex items-center space-x-4">
+                <a href="login.html" class="bg-gray-800 text-white font-bold py-2 px-4 rounded-full shadow-lg hover:bg-gray-700 transition-colors">
+                    Entrar
+                </a>
+                <a href="cadastro.html" class="bg-green-500 text-white font-bold py-2 px-4 rounded-full shadow-lg hover:bg-green-600 transition-colors">
+                    Criar Conta
+                </a>
+            </div> 
+            
+            <div id="loggedInButtons" class="hidden items-center space-x-4">
+                <button id="negotiationsButton" class="relative bg-green-500 text-white rounded-full p-3 shadow-lg hover:bg-green-600 transition-colors" aria-label="Negociações">
+                    <i class="fas fa-bell" aria-label="Notificações"></i>
+                    <span id="notificationBadge" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center hidden">0</span>
+                </button>
+                <a href="perfil.html" class="text-secondary hover:text-primary transition-colors" aria-label="Perfil">
+                    <i class="fas fa-user-circle text-4xl"></i>
+                </a>
+                <button id="logoutButton" class="bg-gray-800 text-white font-bold py-2 px-4 rounded-full shadow-lg hover:bg-gray-700 transition-colors">
+                    Sair
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <nav id="menuList">
+        <ul class="flex flex-col space-y-2 p-4">
+            <li><a href="index.html" class="text-secondary hover:text-accent-color font-semibold transition-colors w-full text-left">Home</a></li>
+            <li><a href="perfil.html" class="text-secondary hover:text-accent-color font-semibold transition-colors w-full text-left">Perfil</a></li>
+            <li><a href="loja.html" class="text-secondary hover:text-accent-color font-semibold transition-colors w-full text-left">Loja</a></li>
+            <li><a href="index.html#sobre" class="text-secondary hover:text-accent-color font-semibold transition-colors w-full text-left">Sobre Nós</a></li>
+        </ul>
+    </nav>
+    
+    <main class="flex-grow p-8">
+        <h2 class="text-4xl font-bold text-center mb-6" style="color: #22c55e;">Peças de Roupa Disponíveis</h2>
+        
+        <div class="sticky top-16 py-4 z-30 bg-primary">
+            <div class="flex justify-center space-x-4">
+                <button class="filter-button bg-secondary text-primary font-semibold py-2 px-6 rounded-full hover:bg-accent-color hover:text-white transition-colors" data-categoria="Todos">Todos</button>
+                <button class="filter-button bg-secondary text-primary font-semibold py-2 px-6 rounded-full hover:bg-accent-color hover:text-white transition-colors" data-categoria="Feminino">Feminino</button>
+                <button class="filter-button bg-secondary text-primary font-semibold py-2 px-6 rounded-full hover:bg-accent-color hover:text-white transition-colors" data-categoria="Masculino">Masculino</button>
+                <button class="filter-button bg-secondary text-primary font-semibold py-2 px-6 rounded-full hover:bg-accent-color hover:text-white transition-colors" data-categoria="Infantil">Infantil</button>
+            </div>
+        </div>
+
+        <div id="pecasContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 max-w-7xl mx-auto mt-8">
+        </div>
+        <p id="loadingMessage" class="text-center text-secondary mt-10">Carregando peças...</p>
+    </main>
+
+    <!-- Chatbot Container -->
+    <div class="chatbot-container">
+        <button id="chatbotToggle" class="chatbot-button" aria-label="Abrir chatbot" title="Abrir chatbot">
+            <i class="fas fa-comments" aria-hidden="true"></i> 
+            <span class="chatbot-text">Abrir Chatbot</span>
+            <span class="sr-only">Abrir Chatbot</span>
+        </button>
+        <div id="chatWindow" class="chat-window">
+            <div class="chat-header">
+                <h3>Fale com o ReUseBot</h3>
+                <button class="close-button" id="closeChat" aria-label="Fechar chatbot">×</button>
+            </div>
+            <div id="chatMessages" class="chat-messages"></div>
+            <div class="chat-input">
+                <input type="text" id="userInput" placeholder="Digite sua mensagem..." />
+                <button id="sendMessage">Enviar</button>
+            </div>
+            <div id="quickReplies" class="quick-replies">
+                <button class="quick-reply" data-question="Como funciona?">Como funciona?</button>
+                <button class="quick-reply" data-question="Ajuda">Ajuda</button>
+                <button class="quick-reply" data-question="Contato">Contato</button>
+                <button class="quick-reply" data-question="Customizar peça">Customizar peça</button>
+                <button class="quick-reply" data-question="Combinar looks">Combinar looks</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="chatbot-package/chatbot.js"></script>
+</body>
+</html>
