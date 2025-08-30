@@ -281,31 +281,6 @@
             const loggedOutButtons = document.getElementById('loggedOutButtons');
             const logoutButton = document.getElementById('logoutButton');
 
-            // Carregar informações do usuário
-            const loadUserInfo = async () => {
-                try {
-                    const response = await fetch(`${API_BASE_URL}/status`);
-                    const data = await response.json();
-
-                    if (data.loggedIn && data.user) {
-                        userName.textContent = data.user.nome;
-                        userEmail.textContent = data.user.email;
-
-                        // Se o usuário tiver foto de perfil, atualizar a imagem
-                        if (data.user.fotoPerfil) {
-                            profileImage.src = data.user.fotoPerfil;
-                        }
-                    } else {
-                        console.log(loggedIn)
-                        // Se não estiver logado, redireciona para o login
-                        window.location.href = 'login.html';
-                    }
-                } catch (error) {
-                    console.error('Erro ao carregar informações do usuário:', error);
-                    window.location.href = 'login.html';
-                }
-            };
-
             // Função para fazer upload da foto de perfil
             const uploadProfilePhoto = async (file) => {
                 try {
